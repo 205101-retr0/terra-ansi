@@ -1,0 +1,9 @@
+[docker]
+Ansible-slave-01 ansible_host=10.10.0.4 ansible_port=22
+Ansible-slave-02 ansible_host=10.10.0.3 ansible_port=22
+[docker:vars]
+ansible_user=root
+ansible_password=alpine
+ansible_connection=ssh
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+

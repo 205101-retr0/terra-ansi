@@ -1,0 +1,11 @@
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
+  children:
+    ansible_master:
+      hosts: 
+        localhost
+      ansible_user: root
+      ansible_port: 2277
+      ansible_connection: ssh

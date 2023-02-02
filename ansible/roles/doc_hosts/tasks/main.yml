@@ -1,0 +1,70 @@
+---
+# tasks file for docker
+- import_role:
+    name: global-vars
+
+- name: Get docker Info
+  docker_container_info:
+    name: "Ansible-slave-0{{ item }}"
+  register: result
+  with_sequence: start=1 end={{ number_of_slaves }}
+
+- name: Initializing empty IP_List
+  set_fact:
+    info_list: []
+      # - cont_name : lala
+      # - cont_ip : 10.
+      # - cont_port : 2220
+  
+
+- name: Add Docker IPs
+  set_fact:
+    info_list: "{{ info_list + [
+        {
+          'cont_name': item.container.Name[1:],
+          'cont_ip': item.container.NetworkSettings.Networks.priv_net.IPAddress,
+          'cont_port': '22',
+        }
+      ]
+    }} "
+
+  with_items:
+    - "{{ result.results }}"
+  loop_control:
+    label: "{{ item.container.NetworkSettings.Networks.priv_net.IPAddress }}"
+
+
+- name: Making a new docker hosts File
+  copy:
+    dest: "{{ home_dir }}/hosts.docker.txt"
+    content: |
+      [docker]
+
+- name: Remove previous Docker IPs
+  lineinfile:
+    path: "{{ home_dir }}/hosts.docker.txt"
+    regexp: "^10.10.[0-9]{1,3}.[0-9]{1,3}$"
+    state: absent
+
+
+###
+# copy: copy a file from the control node to the remote host
+#
+
+- name: Update Hosts file
+  lineinfile:
+      path: "{{ home_dir }}/hosts.docker.txt"
+      line: "{{ item.cont_name }} ansible_host={{ item.cont_ip }} ansible_port={{ item.cont_port }}"
+      insertafter: ^[Docker]
+  loop: "{{ info_list }}"
+
+- name: Add Vars
+  lineinfile:
+    path: "{{ home_dir }}/hosts.docker.txt"
+    line: |
+      [docker:vars]
+      ansible_user=root
+      ansible_password=alpine
+      ansible_connection=ssh
+      ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+    insertafter: EOF

@@ -1,0 +1,4 @@
+---
+# vars file for terraform
+
+dir: "{{ home_dir }}/ssh-containers"

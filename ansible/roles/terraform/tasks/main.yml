@@ -1,0 +1,38 @@
+---
+# tasks file for terraform
+
+- import_role:
+    name: global-vars
+
+- name: "Changing Directory"
+  shell: |
+    cd {{ dir }};
+  register: cdo
+
+- name: "Display output: Terra Plan"
+  debug:
+    msg: "{{ cdo.stderr_lines }}"
+
+- name: "Terra Init"
+  shell: |
+    terraform init;
+
+- name: "Terra Plan"
+  shell: |
+    cd {{ dir }};
+    terraform plan -out plan.tfplan -var 'num={{ number_of_slaves }}';
+  register: plan
+
+# - name: "Display output: Terra Plan"
+#   debug:
+#     msg: "{{ plan.stdout }}"
+
+- name: "Terra Apply"
+  shell: |
+    cd {{ dir }};
+    terraform apply "plan.tfplan";
+  register: app
+
+# - name: "Display output: Terra Apply"
+#   debug:
+#     msg: "{{ app }}"
