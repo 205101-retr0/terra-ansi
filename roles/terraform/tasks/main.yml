@@ -4,17 +4,9 @@
 - import_role:
     name: global-vars
 
-- name: "Changing Directory"
-  shell: |
-    cd {{ dir }};
-  register: cdo
-
-- name: "Display output: Terra Plan"
-  debug:
-    msg: "{{ cdo.stderr_lines }}"
-
 - name: "Terra Init"
   shell: |
+    cd {{ dir }};
     terraform init;
 
 - name: "Terra Plan"

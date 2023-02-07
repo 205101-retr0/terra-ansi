@@ -53,6 +53,7 @@
         chmod +x /root && chmod +x /root/public
         cd /root/public
         echo -e '<h1>Hello, This server is automatically generated</h1>\n<h2>From - "{{ ips.stdout }}"</h2>' > index.html
+        nginx -s reload
 
 
     # Turn this into a if-else thing

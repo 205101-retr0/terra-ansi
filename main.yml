@@ -1,6 +1,8 @@
 ---
 - hosts: localhost1
 
+  gather_facts: no
+
   pre_tasks:
     - name: What is ur interpreter
       shell: |
@@ -24,6 +26,8 @@
     - doc_hosts
 
 - hosts: master
+
+  gather_facts: yes
 
   roles:
     - global-vars
