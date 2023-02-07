@@ -1,4 +1,4 @@
-number_of_slaves: 2
+number_of_slaves: 3
 # home_dir: ~/Desktop/terra/testing
 
 home_dir: "{{ playbook_dir }}"

@@ -8,3 +8,6 @@ Hence, this structure of 1 container running ansible and other containers runnin
 - Use ansible to connect to master and change content of nginx servers
 - Finally check if, after execution, the contents of each nginx container is different.
 
+[To Deploy]
+- Go to main.yml and change python interpreter to the result to ```which python``` or ```which python3```
+- 

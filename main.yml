@@ -1,0 +1,69 @@
+---
+- hosts: localhost1
+
+  pre_tasks:
+    - name: What is ur interpreter
+      shell: |
+        which python3
+      register: out
+    
+    - name: Remove the interpreter
+      lineinfile:
+        path: "{{ playbook_dir }}/hosts.ini"
+        regexp: "ansible_python_interpreter"
+        state: absent
+
+    - name: Add interpreter
+      lineinfile:
+        path: "{{playbook_dir}}/hosts.ini"
+        line: "ansible_python_interpreter={{ out.stdout }}"
+        insertafter: EOF
+
+  roles: 
+    - terraform
+    - doc_hosts
+
+- hosts: master
+
+  roles:
+    - global-vars
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+    - name: Ping master
+      action: ping
+
+    - name: Copying config file
+      copy:
+        src: "{{ home_dir }}/ansible.cfg"
+        dest: /root/ansible.cfg
+
+    - name: Copying hosts file to master
+      copy:
+        src: "{{ home_dir }}/hosts.docker.txt"
+        dest: /root/hosts.ini
+
+    - name: Check if ping happens
+      shell: |
+        ansible docker -m ping -i hosts.ini
+      register: out
+
+    - name: Copying main.yml to master
+      copy:
+        src: "{{ home_dir }}/maindocker.yml"
+        dest: /root/main.yml
+
+    - name: Copying Server config
+      copy:
+        src: "{{ home_dir }}/server.conf"
+        dest: /root/server.conf
+    
+    - name: Running the main file
+      shell: |
+        export ANSIBLE_STDOUT_CALLBACK=debug && \
+        ansible-playbook main.yml -i hosts.ini
+      register: out
+
+# Send a GET request to the individual nginx conts and check it right (Or if they get thru at all)

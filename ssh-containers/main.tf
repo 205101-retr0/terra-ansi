@@ -1,5 +1,5 @@
 resource "docker_image" "sshnx" {
-    name="tejaind30/ssh-nxserver:v1.0"
+    name="tejaind30/ssh-nxserver:v2.2"
 }
 
 resource "docker_image" "sshans" {
