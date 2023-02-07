@@ -1,3 +1,5 @@
-plan.tfplan
-terraform.tfstate
-terraform.tfstate.backup
+ssh-container/plan.tfplan
+ssh-container/terraform.tfstate
+ssh-container/terraform.tfstate.backup
+ssh-container/.terraform
+hosts.docker.txt
