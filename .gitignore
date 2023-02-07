@@ -2,4 +2,5 @@ ssh-containers/plan.tfplan
 ssh-containers/terraform.tfstate
 ssh-containers/terraform.tfstate.backup
 ssh-containers/.terraform/
+ssh-containers/.terraform.lock.hcl/
 hosts.docker.txt
